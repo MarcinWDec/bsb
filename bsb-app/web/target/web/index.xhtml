@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+<f:view>
+
+<p:panel id="RecordSearchPanel" header="Search Records"  toggleable="true" toggleSpeed="500"
+            style="width:85%; overflow:auto; border-style:solid; margin:0 auto;">
+      <h:form id="personsSearchForm">
+        <table id="filterTable" cellpadding="3">
+         <tr>
+            <td align="right"><h:outputLabel value="ID: " style="width: 0%;" /></td>
+            <td align="left"><p:inputMask value="${personListMB.id}" mask="9?9999" maxlength="5" placeHolder=" " /></td>
+         </tr>
+         <tr>
+            <td align="right"><h:outputLabel value="Name: " style="width: 0%;" /></td>
+            <td align="left"><p:inputText value="${personListMB.name}"  /></td>
+         </tr>
+        </table>
+        <p:commandButton action="${personListMB.search}" value="Apply Filter" update=":personsForm" />
+        <p:commandButton action="${personListMB.clearSearch}" value="Clear Filter" update=":personsForm" ajax="false"/>
+      </h:form> 
+</p:panel>
+<br/>
+
+
+<p:panel style="width:85%; overflow:auto; border-style:solid; margin:0 auto;">
+    
+        <h:form id="personsForm">
+        
+        
+            <p:dataTable id="lazyDataTable" value="#{personListMB.allPersons}" var="person" paginator="true" rows="10"
+                selection="#{personListMB.person}" selectionMode="single"
+                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,15" style="width:85%; overflow:auto; margin:0 auto;">
+
+                <f:facet name="header">
+                                <p:commandButton value="Add new"  immediate="true" icon="ui-icon-plus" action="#{personListMB.addNewPerson}" update=":personsForm :personAddForm" oncomplete="personAdd.show()"/>
+                </f:facet>
+
+                <p:column>
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{person.id}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputText value="#{person.name}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Born date</f:facet>
+                    <h:outputText value="#{person.born}" >
+                      <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                        <f:facet name="header"><h:outputText value="" /></f:facet>
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{personListMB.removePerson(person)}" update=":personsForm"/>
+                        <p:commandButton icon="ui-icon-pencil" actionListener="#{personListMB.updatePerson(person)}" update=":personsForm :personAddForm" oncomplete="personAdd.show()"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+      
+        
+        
+          <p:dialog id="personAdd"   header="Person Edition"  widgetVar="personAdd"  showEffect="clip" hideEffect="clip" modal="true" resizable="false">
+            <h:form id="personAddForm">
+                <h:panelGrid columns="2" >
+                    <h:outputLabel value="Model:"/>
+                    <h:outputText value="#{personListMB.person.id}"/>
+
+                    <h:outputLabel value="Name"/>
+                    <p:inputText value="#{personListMB.person.name}"/>
+
+                    <h:outputLabel value="Born:"/>
+                    <p:calendar value="#{personListMB.person.born}" id="popupCal" />  
+                    
+                    <h:outputLabel value="Password"/>
+                    <p:inputText value="#{personListMB.person.password}"/>
+
+                    <f:facet name="footer">
+                        <h:panelGroup style="display:block; text-align:center">
+                            <p:commandButton value="SAVE" icon="ui-icon-disk" action="#{personListMB.updatePerson(personListMB.person)}" 
+                                             oncomplete="personAdd.hide()" update=":personsForm" />                                
+                        </h:panelGroup>
+                    </f:facet>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        
+     
+    </p:panel>
+</f:view>
+</h:body>
+</html>
