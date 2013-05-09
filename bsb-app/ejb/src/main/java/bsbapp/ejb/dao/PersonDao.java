@@ -1,6 +1,7 @@
 package bsbapp.ejb.dao;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import javax.persistence.Query;
 
 import bsbapp.ejb.local.PersonDaoLocal;
 import bsbapp.model.Person;
+import bsbapp.model.enums.GenderE;
 import bsbapp.model.filter.PersonFilter;
 import bsbapp.util.Util;
 
@@ -74,6 +76,7 @@ public class PersonDao implements PersonDaoLocal {
 		for (int x = 0; x < 100; x++) {
 			person = new Person();
 			person.setName("Mr: " + x);
+			person.setGender(x%2==0?GenderE.FEMALE:GenderE.MALE);
 			em.persist(person);
 		}
 
@@ -121,6 +124,8 @@ public class PersonDao implements PersonDaoLocal {
 
 	private FilteredQueryParameters createQueryParams(String queryStr,
 			PersonFilter personFilter) {
+		
+		System.out.println("createQueryParams: "+personFilter);
 
 		FilteredQueryParameters params = new FilteredQueryParameters();
 
@@ -128,9 +133,12 @@ public class PersonDao implements PersonDaoLocal {
 
 		String nameStr = personFilter.getName();
 		String idStr = personFilter.getId();
+		Date dateFrom = personFilter.getDateFrom();
+		Date dateTo = personFilter.getDateTo();
+		GenderE gender = personFilter.getGender();
 
 		if (personFilter != null
-				&& (!Util.isBlank(idStr) || !Util.isBlank(nameStr))) {
+				&& personFilter.isNotEmpty()) {
 			strB.append(" where 1=1 ");
 
 			if (!Util.isBlank(nameStr)) {
@@ -142,8 +150,24 @@ public class PersonDao implements PersonDaoLocal {
 				strB.append(" and id = :id ");
 				params.addParam("id", Integer.parseInt(idStr));
 			}
+			
+			if (!Util.isNull(dateFrom)) {
+				strB.append(" and born >=:dateFrom ");
+				params.addParam("dateFrom", dateFrom);
+			}
+			
+			if (!Util.isNull(dateTo)) {
+				strB.append(" and born <=:dateTo ");
+				params.addParam("dateTo", dateTo);
+			}
 
+			if (!Util.isNull(gender)) {
+				strB.append(" and gender =:gender ");
+				params.addParam("gender", gender);
+			}
 		}
+		
+		System.out.println("createQueryParams: "+strB.toString());
 				
 		params.setQueryStr(strB.toString());
 		return params;

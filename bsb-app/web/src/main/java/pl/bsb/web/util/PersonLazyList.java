@@ -5,12 +5,11 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 
+import org.primefaces.model.LazyDataModel;
+
 import bsbapp.model.Person;
 import bsbapp.model.filter.PersonFilter;
 import bsbapp.remote.PersonServiceRemote;
-import bsbapp.util.Util;
-
-import org.primefaces.model.LazyDataModel;
 
 public class PersonLazyList extends LazyDataModel<Person> {
 
@@ -55,7 +54,7 @@ public class PersonLazyList extends LazyDataModel<Person> {
 	}
 
 	private boolean isFilter() {
-		boolean isFilter = personFilter!=null && (!Util.isBlank(personFilter.getId())||!Util.isBlank(personFilter.getName()));
+		boolean isFilter = personFilter!=null && personFilter.isNotEmpty();
 	    return isFilter;
 	}
 

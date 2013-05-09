@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import bsbapp.model.enums.GenderE;
+
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "findPersonAll", query = "SELECT o FROM Person o"),
@@ -20,6 +22,7 @@ public class Person implements Serializable {
 	private int id;
 	private String password;
 	private Date born;
+	private GenderE gender;
 
 	@Id
 	@GeneratedValue
@@ -59,6 +62,14 @@ public class Person implements Serializable {
 	public String toString() {
 		return "Person [name=" + name + ", id=" + id + ", password=" + password
 				+ ", born=" + born + "]";
+	}
+
+	public GenderE getGender() {
+		return gender;
+	}
+
+	public void setGender(GenderE gender) {
+		this.gender = gender;
 	}
 	
 	

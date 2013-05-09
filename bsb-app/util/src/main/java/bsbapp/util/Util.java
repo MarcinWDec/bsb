@@ -6,6 +6,10 @@ public class Util {
 		return (str==null || "".equals(str.trim()));
 	}
 	
+	public static boolean isNull(Object obj){
+		return obj==null ;
+	}
+	
 	public static boolean isNumeric(String str){
 		try{
 			Integer.parseInt(str);

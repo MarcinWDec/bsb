@@ -18,7 +18,22 @@
             <td align="right"><h:outputLabel value="Name: " style="width: 0%;" /></td>
             <td align="left"><p:inputText value="${personListMB.name}"  /></td>
          </tr>
-        </table>
+         <tr>
+            <td align="right"><h:outputLabel value="Date from: " style="width: 0%;" /></td>
+            <td align="left"><p:calendar value="#{personListMB.dateFrom}" id="calFrom" /></td>
+         </tr>
+         <tr>
+            <td align="right"><h:outputLabel value="Date to: " style="width: 0%;" /></td>
+            <td align="left"><p:calendar value="#{personListMB.dateTo}" id="calTo" /></td>
+         </tr>
+		 <tr>
+			<td align="right"><h:outputLabel value="Gender: "	style="width: 0%;" /></td>
+			<td align="left"><p:selectOneMenu id="gender" 	value="#{personListMB.gender}">
+								<f:selectItems value="#{genderEMB.genderValues}" />
+							</p:selectOneMenu>
+			</td>
+		 </tr>
+		</table>
         <p:commandButton action="${personListMB.search}" value="Apply Filter" update=":personsForm" />
         <p:commandButton action="${personListMB.clearSearch}" value="Clear Filter" update=":personsForm" ajax="false"/>
       </h:form> 
@@ -49,6 +64,10 @@
                     <h:outputText value="#{person.name}" />
                 </p:column>
                 <p:column>
+                    <f:facet name="header">Gender</f:facet>
+                    <h:outputText value="#{person.gender.label}" />
+                </p:column>
+                <p:column>
                     <f:facet name="header">Born date</f:facet>
                     <h:outputText value="#{person.born}" >
                       <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
@@ -65,7 +84,7 @@
       
         
         
-          <p:dialog id="personAdd"   header="Person Edition"  widgetVar="personAdd"  showEffect="clip" hideEffect="clip" modal="true" resizable="false">
+          <p:dialog   header="Person Edition"  widgetVar="personAdd"  showEffect="clip" hideEffect="clip" modal="true" resizable="false">
             <h:form id="personAddForm">
                 <h:panelGrid columns="2" >
                     <h:outputLabel value="Model:"/>
@@ -73,6 +92,11 @@
 
                     <h:outputLabel value="Name"/>
                     <p:inputText value="#{personListMB.person.name}"/>
+                    
+                    <h:outputLabel value="Gender"/>
+                    <p:selectOneMenu id="gender" 	value="#{personListMB.person.gender}">
+								<f:selectItems value="#{genderEMB.genderValues}" />
+							</p:selectOneMenu>
 
                     <h:outputLabel value="Born:"/>
                     <p:calendar value="#{personListMB.person.born}" id="popupCal" />  
