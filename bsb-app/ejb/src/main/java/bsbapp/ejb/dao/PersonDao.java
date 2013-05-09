@@ -125,7 +125,6 @@ public class PersonDao implements PersonDaoLocal {
 	private FilteredQueryParameters createQueryParams(String queryStr,
 			PersonFilter personFilter) {
 		
-		System.out.println("createQueryParams: "+personFilter);
 
 		FilteredQueryParameters params = new FilteredQueryParameters();
 
@@ -167,7 +166,6 @@ public class PersonDao implements PersonDaoLocal {
 			}
 		}
 		
-		System.out.println("createQueryParams: "+strB.toString());
 				
 		params.setQueryStr(strB.toString());
 		return params;
